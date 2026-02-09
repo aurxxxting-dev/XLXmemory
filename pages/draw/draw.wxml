@@ -1,0 +1,70 @@
+<!-- pages/draw/draw.wxml -->
+<view class="container">
+  
+  <!-- 标题 -->
+  <view class="header">
+    <text class="title">🎋 每日一签</text>
+  </view>
+
+  <!-- 还没抽签时显示 -->
+  <block wx:if="{{!drawResult}}">
+    <view class="shake-area" bindtap="onShake">
+      <text class="shake-text">点击摇一摇</text>
+      <text class="shake-hint">或摇晃手机</text>
+    </view>
+  </block>
+
+  <!-- 抽完签后显示 -->
+  <block wx:if="{{drawResult}}">
+    
+    <!-- 签文结果 -->
+    <view class="result-card">
+      <text class="result-label">您的运势</text>
+      <text class="result-text {{drawResult === '大吉' ? 'lucky' : drawResult === '大凶' ? 'unlucky' : ''}}">
+        {{drawResult}}
+      </text>
+      <text class="result-hint">第 {{randomNum}} 签</text>
+    </view>
+
+    <!-- 未解锁时显示广告按钮 -->
+    <block wx:if="{{!isUnlocked}}">
+      <view class="unlock-section">
+        <text class="lock-hint">🔒 完整解签已锁定</text>
+        <button 
+          class="unlock-btn {{adLoading ? 'loading' : ''}}"
+          bindtap="onUnlockClick"
+          disabled="{{adLoading}}"
+        >
+          <text wx:if="{{!adLoading}}">🎬 看15秒视频解锁 AI 解签</text>
+          <text wx:if="{{adLoading}}">加载中...</text>
+        </button>
+        
+        <text class="unlock-tip">看完广告即可查看详细运势分析</text>
+      </view>
+    </block>
+
+    <!-- 已解锁显示 AI 解签 -->
+    <block wx:if="{{isUnlocked}}">
+      <view class="interpretation-card">
+        <view class="interpretation-header">
+          <text class="ai-badge">🤖 AI大师解签</text>
+        </view>
+        
+        <view wx:if="{{aiResult}}" class="interpretation-content">
+          <text class="interpretation-text">{{aiResult}}</text>
+        </view>
+        
+        <view wx:if="{{!aiResult}}" class="interpretation-loading">
+          <text>AI 正在为您解读...✨</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 再抽一次按钮 -->
+    <button class="reshake-btn" bindtap="onShake">
+      🔄 再抽一次
+    </button>
+
+  </block>
+
+</view>

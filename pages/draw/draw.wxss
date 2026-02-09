@@ -1,0 +1,173 @@
+/* pages/draw/draw.wxss */
+
+.container {
+  padding: 40rpx;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 标题 */
+.header {
+  text-align: center;
+  margin-bottom: 60rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2rpx 10rpx rgba(0,0,0,0.2);
+}
+
+/* 摇一摇区域 */
+.shake-area {
+  width: 400rpx;
+  height: 400rpx;
+  margin: 100rpx auto;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 60rpx rgba(0,0,0,0.3);
+}
+
+.shake-text {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #764ba2;
+}
+
+.shake-hint {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+/* 签文卡片 */
+.result-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 60rpx;
+  text-align: center;
+  box-shadow: 0 10rpx 40rpx rgba(0,0,0,0.2);
+  margin-bottom: 40rpx;
+}
+
+.result-label {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.result-text {
+  font-size: 80rpx;
+  font-weight: bold;
+  display: block;
+  margin: 20rpx 0;
+}
+
+/* 大吉红色 */
+.lucky {
+  color: #e74c3c;
+}
+
+/* 大凶灰色 */
+.unlucky {
+  color: #555;
+}
+
+.result-hint {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 解锁区域 */
+.unlock-section {
+  background: rgba(255,255,255,0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.lock-hint {
+  font-size: 28rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 30rpx;
+}
+
+.unlock-btn {
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  padding: 30rpx 60rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.unlock-btn.loading {
+  opacity: 0.7;
+}
+
+.unlock-tip {
+  font-size: 22rpx;
+  color: #999;
+  display: block;
+  margin-top: 20rpx;
+}
+
+/* AI解签卡片 */
+.interpretation-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0,0,0,0.2);
+  margin-bottom: 40rpx;
+}
+
+.interpretation-header {
+  margin-bottom: 30rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+  padding-bottom: 20rpx;
+}
+
+.ai-badge {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 10rpx 30rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+}
+
+.interpretation-content {
+  line-height: 1.8;
+}
+
+.interpretation-text {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.interpretation-loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+}
+
+/* 再抽一次按钮 */
+.reshake-btn {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 2rpx solid rgba(255,255,255,0.5);
+  border-radius: 50rpx;
+  width: 60%;
+}
+
+button::after {
+  border: none;
+}
