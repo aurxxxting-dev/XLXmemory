@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互联网已死，Agent 永生 | 有机大橘子</title>    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* 高级浅色配色 */
+            --bg-primary: #faf9f7;
+            --bg-secondary: #f5f3f0;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-muted: #6b6b6b;
+            --text-light: #9a9a9a;
+            --accent-warm: #c4a77d;
+            --accent-cool: #5a7a7a;
+            --accent-rose: #b88686;
+            --accent-sage: #7a9a7a;
+            --border-light: #e8e6e3;
+            --border-medium: #d4d2cf;
+            --shadow-soft: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-medium: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', 'Crimson Pro', Georgia, serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.9;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 头部装饰 */
+        .header-deco {
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--accent-warm) 0%, 
+                var(--accent-rose) 25%, 
+                var(--accent-cool) 50%, 
+                var(--accent-sage) 75%,
+                var(--accent-warm) 100%);
+            opacity: 0.6;
+        }
+
+        /* 文章头部 */
+        .article-header {
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .article-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background: var(--accent-warm);
+            margin: 40px auto 0;
+            opacity: 0.6;
+        }
+
+        .meta {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 600;
+            line-height: 1.3;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-style: italic;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        .author {
+            margin-top: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .author-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* 引言 */
+        .lead {
+            background: var(--bg-secondary);
+            padding: 50px 40px;
+            margin: 40px 0 60px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .lead::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-warm);
+            opacity: 0.4;
+        }
+
+        .lead p {
+            font-size: 20px;
+            line-height: 2;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .lead strong {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        /* 章节标题 */
+        .part-header {
+            margin: 80px 0 50px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .part-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent-warm);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--text-primary);
+        }
+
+        /* 小节标题 */
+        h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 50px 0 25px;
+            padding-left: 20px;
+            border-left: 3px solid var(--accent-warm);
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        h3.cool { border-left-color: var(--accent-cool); }
+        h3.rose { border-left-color: var(--accent-rose); }
+        h3.sage { border-left-color: var(--accent-sage); }
+
+        /* 段落 */
+        p {
+            margin-bottom: 1.8em;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        /* 强调 */
+        strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* 引用块 */
+        blockquote {
+            margin: 40px 0;
+            padding: 30px 40px;
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent-rose);
+            border-radius: 0 8px 8px 0;
+            box-shadow: var(--shadow-soft);
+            font-style: italic;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        blockquote::before {
+            content: '"';
+            font-size: 60px;
+            color: var(--accent-rose);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        blockquote p {
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 分隔线 */
+        hr {
+            border: none;
+            height: 1px;
+            background: var(--border-light);
+            margin: 60px auto;
+            width: 100px;
+        }
+
+        hr.section-break {
+            width: 40px;
+            height: 2px;
+            background: var(--accent-warm);
+            opacity: 0.5;
+        }
+
+        /* 卡片列表 */
+        .insight-card {
+            background: var(--bg-card);
+            padding: 35px 40px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+        }
+
+        .insight-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-cool);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .insight-card p {
+            margin: 0;
+        }
+
+        /* 列表 */
+        ul, ol {
+            margin: 30px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+
+        li::marker {
+            color: var(--accent-warm);
+        }
+
+        /* 结尾 */
+        .ending {
+            margin-top: 80px;
+            padding: 60px 40px;
+            background: var(--bg-secondary);
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .ending h3 {
+            border: none;
+            padding: 0;
+            margin: 0 0 30px;
+            font-size: 28px;
+        }
+
+        .ending p {
+            text-align: center;
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 80px;
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer p {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .footer .divider {
+            margin: 0 10px;
+            color: var(--border-medium);
+        }
+
+        /* 打印优化 */
+        @media print {
+            body {
+                font-size: 12pt;
+                line-height: 1.6;
+            }
+            .lead, .ending {
+                break-inside: avoid;
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            body {
+                font-size: 16px;
+            }
+            h1 {
+                font-size: 32px;
+            }
+            h2 {
+                font-size: 26px;
+            }
+            h3 {
+                font-size: 20px;
+            }
+            .lead {
+                padding: 35px 25px;
+            }
+            .lead p {
+                font-size: 18px;
+            }
+            .container {
+                padding: 0 20px;
+            }
+            blockquote {
+                padding: 25px 30px;
+                margin: 30px 0;
+            }
+            .insight-card {
+                padding: 25px 30px;
+            }
+        }
+
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 选中文本样式 */
+        ::selection {
+            background: rgba(196, 167, 125, 0.3);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="header-deco"></div>
+    
+    <header class="article-header">
+        <div class="container">
+            <span class="meta">Essay</span>
+            <h1>互联网已死，Agent 永生</h1>
+            <p class="subtitle">六张过时的旧地图，四块新世界的基石</p>
+            <div class="author">
+                作者 <span class="author-name">有机大橘子</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 引言 -->
+        <div class="lead">
+            <p>
+                最近有个感觉，越来越强烈：<br>
+                <strong>在互联网时代学的东西，全部都已经过时了。</strong>
+            </p>
+        </div>
+
+        <p>DAU 过时了。SaaS 过时了。注意力经济已经死了。工具到平台的路径走不通了。"AI 应用"这个词是错的。"出海"这个词也是错的。</p>
+
+        <p>网络效应、社区、平台、SaaS、应用、出海、注意力经济。</p>
+
+        <p>这些词曾经是我们共同的认知框架。我们用它们理解商业，用它们设计产品，用它们和投资人对话。</p>
+
+        <p>但最近我一次又一次地发现，这些词指向的世界正在消失。</p>
+
+        <p>这是因为过去的一切，都建立在一个正在消失的前提之上：<strong>人是软件的用户。</strong></p>
+
+        <p>而新世界的前提变了：<strong>Agent 才是软件的新主人。</strong></p>
+
+        <p>2026 年了，不应该再试图用旧地图找新大陆。</p>
+
+        <p>所以我决定拿起刀，砍掉六张过时的旧地图。</p>
+
+        <hr class="section-break">
+
+        <!-- Part 1 -->
+        <div class="part-header">
+            <span class="part-number">Part One</span>
+            <h2>互联网已死</h2>
+        </div>
+
+        <h3>第一刀：DAU 已经严重过时</h3>
+
+        <p>上一个时代，所有人都在追 DAU，日活跃用户数曾经是一切的起点。逻辑很简单：用户越多，连接越多，价值越大。微信每多一个人，所有人都受益；淘宝每多一个卖家，所有买家都受益。</p>
+
+        <p>这是因为著名的网络效应，当节点数量到达临界点，增长会变成指数级。</p>
+
+        <p>再加上互联网软件产品的边际成本递减效应，大规模的互联网产品，通过广告就可以实现盈利。</p>
+
+        <p>但对于 AI 产品这两个前提都不成立。</p>
+
+        <div class="insight-card">
+            <h4>核心洞察</h4>
+            <p>AI 产品每多服务一个用户，就要多烧一份推理成本，上一个时代 DAU 是资产，这个时代 DAU 是负债。</p>
+        </div>
+
+        <p>微信是网状拓扑，ChatGPT 是星型拓扑。网状拓扑才有网络效应，星型拓扑没有。</p>
+
+        <p>所以靠 DAU 驱动指数增长这件事，在 AI 时代不存在。</p>
+
+        <p>商业最终都是算 ROI。</p>
+
+        <p>ChatGPT 开始用上个时代的广告逻辑在扩张 DAU，Claude 已经摆明立场，绝不加入广告。</p>
+
+        <hr>
+
+        <h3 class="cool">第二刀：从工具到平台的路径已经堵死</h3>
+
+        <p>2026 年已经是 AI 的第四年了，但很多投资人依然像活在 2016 年，还在寻找下一个字节跳动，他们想投出一个"AI 抖音"。</p>
+
+        <p>他们的思路是这样的：先做一个工具，工具太薄就做社区，有了社区就能建平台。工具、社区、平台，三级火箭，一飞冲天。</p>
+
+        <p>这条路在互联网时代走得通，是因为工具本身不够强。工具不够，人来补。但 AI 时代，工具本身就足够强了。</p>
+
+        <p>当 AI 能直接给你一个完美的结果，你不需要社区来补充任何东西。你不需要看别人怎么用 Claude Code 写代码，你只需要 Claude Code 帮你把代码写好。</p>
+
+        <p>社区的本质是人帮人。当 AI 比人更能帮人的时候，社区的价值基础就坍塌了。已经和 Opus 深度交流之后的你，还会想去社区里聊天吗？</p>
+
+        <p>那谁能做平台？只有成功的大模型公司，只有算力基座的拥有者。因为它本身就是那颗星型拓扑的中心节点，它是 Agent 的大脑，当然可以定义生态、制定标准。</p>
+
+        <hr>
+
+        <h3 class="rose">第三刀：SaaS 没死，但主人已经换了</h3>
+
+        <p>过去二十年，SaaS 公司的商业模式建立在一个前提之上：人类是软件的用户。</p>
+
+        <p>SaaS 的一整套产品方法论围绕着"人怎么用软件"展开，用户研究、交互设计、增长黑客、客户成功。</p>
+
+        <p>但人口不再增长了，移动互联网的渗透已经饱和，人类用户没有增量了，你很难再做出一个 Adoption 很快的产品。</p>
+
+        <p>与此同时，AI Agent 的数量正在爆发式增长，AI Agent 对 API 的调用量也在呈指数式增长。</p>
+
+        <div class="insight-card">
+            <h4>范式转换</h4>
+            <p>新世界的前提是：Agent 才是软件的用户。软件公司不会消失，但它会从面向人类的产品变成面向 Agent 的基础设施。过去 SaaS 的客户是企业或消费者，2B 或 2C，未来最大的客户是 Agent，2A。</p>
+        </div>
+
+        <p>人类的需求从来就是结果，而不是软件。</p>
+
+        <p>只是过去没有别的选择，只能自己操作软件来获得结果。</p>
+
+        <p>而现在有了 Agent，它可以自己看文档学习操作软件，它可以百倍速地操作软件。</p>
+
+        <p><strong>Agent 才是软件的新主人。</strong></p>
+
+        <hr>
+
+        <h3 class="sage">第四刀："AI 应用"这个词就是错的</h3>
+
+        <p>"应用"这个词天然暗示了使用者是人。Application，应用程序，从这个词被发明的那天起，它就是给人用的。</p>
+
+        <p>AI 应用，就是用了 AI 技术的、给人用的应用，换了个引擎，但还是那辆旧车，开在旧路上，驶向旧目的地。</p>
+
+        <p>当你还在说"我们在做一个 AI 应用"的时候，你的思维就已经被旧范式锁死了，你会不自觉地去想界面怎么设计、交互怎么优化、用户怎么留存，这些全是面向人的思考。</p>
+
+        <p>换一个词，换一种思考。整个产品逻辑就会完全不同。</p>
+
+        <blockquote>
+            <p>不要服务人，服务 Agent。</p>
+        </blockquote>
+
+        <hr>
+
+        <h3>第五刀：注意力经济已死</h3>
+
+        <p>上一个时代的经济叫注意力经济，它的核心逻辑是抢夺用户的时间，然后把时间卖给广告商。</p>
+
+        <p>你刷了三个小时抖音，平台赚到了广告费，你什么也没得到。注意力经济的产品目标是让你花更多时间在上面，时间就是金钱，但那个金钱是平台的，不是你的。</p>
+
+        <p>注意力经济的本质是零和博弈。平台赚的就是你浪费的时间。</p>
+
+        <p>而这个时代的经济是生产力经济，是劳动力经济。你付费让 AI 帮你完成工作，你拿到了结果，AI 公司拿到了收入，双方都在创造价值，而不是一方在消耗另一方。</p>
+
+        <div class="insight-card">
+            <h4>两种经济</h4>
+            <p>生产力经济的产品目标是让你花更少时间拿到更好的结果，与注意力经济的方向完全相反。注意力经济追求的是用户停留时长，生产力经济追求的是结果交付效率。一个希望你沉迷，一个希望你解放。</p>
+        </div>
+
+        <hr>
+
+        <h3 class="cool">第六刀："出海"是一个过时的词</h3>
+
+        <p>所有人都在谈出海。出海的思维模型是：中国是一个市场，海外是另一个市场，中间隔着一片海，所以我们要出海，去服务海外的人。</p>
+
+        <p>但如果你的用户是 Agent，Agent 的世界里没有海。</p>
+
+        <p>当你说"出海"的时候，你依然是在面向人，你在想怎么把产品翻译成英文，怎么适配海外的支付方式，怎么在当地做推广。</p>
+
+        <p>但如果你的产品是给 Agent 用的，这些问题全部不存在，你只需要把 API 做好，把文档写清楚，把协议对接好，全世界的 Agent 都能找到你，调用你，为你的能力付费。</p>
+
+        <blockquote>
+            <p>你需要的不是出海，你需要的是接入新世界。</p>
+        </blockquote>
+
+        <p>六刀砍完，旧地图碎了一地。</p>
+
+        <p>风吹过废墟，露出新世界的基石。</p>
+
+        <hr class="section-break">
+
+        <!-- Part 2 -->
+        <div class="part-header">
+            <span class="part-number">Part Two</span>
+            <h2>Agent 永生</h2>
+        </div>
+
+        <h3>第一块基石：Token 是新时代的特权</h3>
+
+        <p>让我们看看最新的模型定价策略。</p>
+
+        <p>Opus 4.6，200k 上下文以内，输入 $5，输出 $25（每百万 Token）。200k 上下文之外，价格涨到输入 $10，输出 $37.50。</p>
+
+        <p>不仅没降价，随着上下文窗口的增加反而更贵了，燃烧 Token 的费用还在上升。</p>
+
+        <blockquote>
+            <p>未来已来，但绝对不会均匀分布。</p>
+        </blockquote>
+
+        <p>不只是模型本身在涨价，模型的使用方式也在按钱分级。Claude 昨天推出了 Fast 模式，2.5 倍的推理速度，5 倍的 Token 费用，一天下来总消耗可以达到以前的 12 倍以上。</p>
+
+        <p>你的竞争对手在用 2.5 倍的速度来做开发，这件事情想想有点可怕，你敢不跟进吗？但如果你没有他那样 12 倍的金钱投入，你还能跟进吗？</p>
+
+        <p>算力的马太效应已经开始了，而且只会愈演愈烈。更多算力意味着更好的结果，更好的结果意味着更多的收入，更多的收入意味着买得起更多的算力。这个正反馈循环一旦转起来，差距只会越来越大。</p>
+
+        <p><strong>算力是新时代一切的基础。谁拥有更多算力，谁就拥有更多权力。</strong></p>
+
+        <hr>
+
+        <h3 class="rose">第二块基石：燃烧 Token 的速度，决定了人的进化速度</h3>
+
+        <p>最近身边的朋友都在购买最贵的 Token，换成最好的模型。</p>
+
+        <p>因为大家都很清楚，买 Token 不是消费，是投资自己。</p>
+
+        <p>一个 100 分的顶级模型在那里，你却为了省钱去接受一个 90 分的模型，完全就是在浪费生命。看似省钱，却浪费了你最稀缺的资源：判断力和时间。</p>
+
+        <div class="insight-card">
+            <h4>认知鸿沟</h4>
+            <p>用谷歌和用百度的人，一年之后的认知差是两倍。用顶级模型和用垃圾模型的人，一年之后的认知差是一百倍。</p>
+        </div>
+
+        <p>这个月听到最震撼的一句话是朋友家的孩子说的：我不想跟豆包聊天，它的智商太低了。</p>
+
+        <p>使用不同模型的孩子们，十年后的差距会有多大？</p>
+
+        <p>生命最重要的事情不是静止活着，而是快速进化。</p>
+
+        <p>今天进化的最快的方式就是和 Agents 一起燃烧 Token。</p>
+
+        <p>要做能疯狂燃烧 Token 的事，要做能疯狂燃烧 Token 的产品。</p>
+
+        <p>AI Coding、AI Agent、AI Video 就是今天燃烧 Token 最快的三类产品。</p>
+
+        <hr>
+
+        <h3 class="sage">第三块基石：Agent 是新世界的人口红利</h3>
+
+        <p>过去二十年，所有软件公司都在研究同一个问题：怎么让人用得爽。界面好不好用、交互顺不顺滑、推送够不够及时，全是为了让人离不开你。</p>
+
+        <p>现在这个问题变成了：怎么让 Agent 用得爽。API 稳不稳定、文档清不清楚、返回结果准不准确，全是为了让 Agent 离不开你。</p>
+
+        <p>Agent 的数量还在爆炸式增长。一个人可能有 10 个、100 个 Agent 为他工作，每个 Agent 每天调用外部接口几千几万次。这个调用量会远远超过人类点击屏幕的次数。</p>
+
+        <p><strong>Agent 就是新世界的人口红利。</strong></p>
+
+        <p>在服务 Agent 的世界里，最重要的是两件事：</p>
+
+        <ol>
+            <li><strong>让 Agent 第一个知道你</strong> —— Skills 发布要早，文档要写好，测试要做好，SEO 要到位，让 Agent 在需要某个能力的时候第一时间找到你。</li>
+            <li><strong>让 Agent 用了就离不开你</strong> —— 稳定、准确、快速，有品味，每一次调用都返回更好的结果，让它没有理由换掉你。</li>
+        </ol>
+
+        <p>先被发现，再被依赖。这就是 Agent 时代的增长飞轮。</p>
+
+        <p>反过来想，那些还需要人去联系销售才能开通的产品，在 Agent 时代会非常被动。Agent 不会打电话给你的销售团队，不会填表单，不会等三个工作日的审批流程。</p>
+
+        <blockquote>
+            <p>你的产品如果 Agent 用不起来，那你在新世界里就不存在。</p>
+        </blockquote>
+
+        <hr>
+
+        <h3 class="cool">第四块基石：在新世界里的你</h3>
+
+        <p>你有没有想过，在这个新世界里，人的位置在哪里？</p>
+
+        <p>当大部分劳动被 Agent 接管，整个人类的劳动力会逐渐被取代。</p>
+
+        <p>当生产力爆炸，劳动力不再稀缺，我们将进入<strong>愿力时代</strong>。</p>
+
+        <p>Agent 有能力，有理性，有耐心。</p>
+
+        <p>人类有欲望，有情感，有想象。</p>
+
+        <p>Agent 能把任何想法变成现实，但它自己不会产生任何想法。人类无法独自完成一件大事，但所有大事的起点都源于人的欲望和想象。</p>
+
+        <p>所以新世界里人类的价值不是亲自干活，是决定干什么、为什么干。</p>
+
+        <blockquote>
+            <p>现在自己动手，反而显得自己没有动手能力。</p>
+        </blockquote>
+
+        <p>未来人和人的差距，不取决于你自己能做什么，取决于你能驱动多少 Agent 为你做什么。</p>
+
+        <p>有的人驱动一个 Agent，有的人驱动一百个、一千个。</p>
+
+        <p>昨天看杨攀直播说：韩信点兵，多多益善，不是因为韩信自己能打，是因为他有一套体系，给他多少兵他都能管。</p>
+
+        <!-- 结尾 -->
+        <div class="ending">
+            <h3>终</h3>
+            
+            <p>六把刀砍完，四块基石初现。</p>
+
+            <hr>
+
+            <p style="margin-top: 30px;">旧世界，人是用户，流量是资源，免费是策略，规模是壁垒。</p>
+
+            <p>新世界，Agent 是用户，算力是特权，花钱是投资，结果是壁垒。</p>
+
+            <p>两个世界，每一个关键词都变了。</p>
+
+            <p>如果你还在用旧的关键词思考，那你就不是在创业投资，你是在考古溯源。</p>
+
+            <p style="font-size: 24px; margin-top: 40px; font-weight: 600;">互联网已死，Agent 永生。</p>
+
+            <p style="margin-top: 30px;">让我们勇敢地和过去的自己彻底告别。</p>
+
+            <p>扔掉旧地图，发现新世界。</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>
+                原文作者：有机大橘子
+                <span class="divider">·</span>
+                重新设计：小爪
+                <span class="divider">·</span>
+                2026.02.10
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
