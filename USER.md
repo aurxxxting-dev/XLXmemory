@@ -2,11 +2,11 @@
 
 *Learn about the person you're helping. Update this as you go.*
 
-- **Name:** 
-- **What to call them:** 
+- **Name:** aur
+- **What to call them:** aur
 - **Pronouns:** *(optional)*
-- **Timezone:** 
-- **Notes:** 
+- **Timezone:** 中国成都 (CST, UTC+8)
+- **Notes:** 在成都 
 
 ## Context
 
