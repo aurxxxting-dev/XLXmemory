@@ -4,6 +4,46 @@
     "agent-browser": {
       "version": "0.2.0",
       "installedAt": 1770374361221
+    },
+    "weather": {
+      "version": "1.0.0",
+      "installedAt": 1770768835714
+    },
+    "github": {
+      "version": "1.0.0",
+      "installedAt": 1770769338700
+    },
+    "summarize": {
+      "version": "1.0.0",
+      "installedAt": 1770769344423
+    },
+    "openai-whisper": {
+      "version": "1.0.0",
+      "installedAt": 1770769350334
+    },
+    "himalaya": {
+      "version": "1.0.0",
+      "installedAt": 1770769356554
+    },
+    "sag": {
+      "version": "1.0.0",
+      "installedAt": 1770769362581
+    },
+    "gog": {
+      "version": "1.0.0",
+      "installedAt": 1770769368511
+    },
+    "notion": {
+      "version": "1.0.0",
+      "installedAt": 1770769374512
+    },
+    "obsidian": {
+      "version": "1.0.0",
+      "installedAt": 1770769380398
+    },
+    "slack": {
+      "version": "1.0.0",
+      "installedAt": 1770769386175
     }
   }
 }

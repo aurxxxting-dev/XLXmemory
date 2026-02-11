@@ -1,0 +1,9 @@
+{
+  "status": "sleeping",
+  "bedtime": "23:06",
+  "wakeup": "07:30",
+  "wakeupJobId": "43f6fed7-9e87-48ca-99b8-d1829f8a217e",
+  "lastActive": "2026-02-10T23:06:00+08:00",
+  "sleepMode": "low_power",
+  "note": "用户未发消息超过30分钟，自动进入睡眠。紧急消息仍可唤醒。"
+}
