@@ -72,6 +72,17 @@
             color: #4caf50;
             margin-bottom: 10px;
         }
+        .official-box {
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .official-box h4 {
+            color: #2196f3;
+            margin-bottom: 10px;
+        }
         code {
             background: rgba(0,0,0,0.3);
             padding: 2px 6px;
@@ -111,12 +122,26 @@
             margin: 15px 0;
             border-radius: 0 8px 8px 0;
         }
+        .tip {
+            background: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
         footer {
             text-align: center;
             margin-top: 50px;
             padding: 30px;
             color: #666;
             font-size: 0.85rem;
+        }
+        a {
+            color: #e94560;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 600px) {
             h1 { font-size: 1.5rem; }
@@ -128,12 +153,17 @@
     <div class="container">
         <header>
             <h1>OpenClaw GLM 模型配置问题汇总</h1>
-            <p class="subtitle">智谱 AI GLM 模型在 OpenClaw 中的常见问题与解决方案</p>
+            <p class="subtitle">智谱 AI GLM 模型在 OpenClaw 中的常见问题与解决方案<br><small>基于官方文档与实际使用经验整理</small></p>
         </header>
 
         <div class="section">
             <h2>问题背景</h2>
-            <p>在使用 OpenClaw 配置智谱 AI (Zhipu) 的 GLM 模型时，经常会遇到 <span class="highlight">"Unknown model"</span> 错误。这主要是由于模型名称格式不统一、配置缓存问题以及网关重启机制导致的。</p>
+            <p>在使用 OpenClaw 配置智谱 AI (Zhipu) 的 GLM 模型时，经常会遇到 <span class="highlight">"Unknown model"</span> 或 <span class="highlight">"Model is not allowed"</span> 错误。本文档汇总了官方 FAQ 和实际踩坑经验，帮助你快速定位和解决问题。</p>
+            
+            <div class="tip">
+                <strong>💡 官方文档参考：</strong><br>
+                更多详细信息请查阅 OpenClaw 官方 FAQ：<a href="https://docs.openclaw.ai/help/faq" target="_blank">docs.openclaw.ai/help/faq</a>
+            </div>
         </div>
 
         <div class="section">
@@ -145,14 +175,14 @@
             </div>
             
             <h3>问题原因</h3>
-            <p>OpenClaw 的模型配置存在两种写法，容易导致混淆：</p>
+            <p>OpenClaw 的模型配置存在多种写法，不同版本对格式的支持不一致：</p>
             <ul>
                 <li><code>glm-4-flash</code> — 简洁格式（推荐）</li>
-                <li><code>zhipu/glm-4-flash</code> — 带 provider 前缀</li>
+                <li><code>zhipu/glm-4-flash</code> — 带 provider 前缀（某些版本不支持）</li>
             </ul>
             
             <div class="warning">
-                <strong>注意：</strong>不同版本的 OpenClaw 对这两种格式的支持不一致，混合使用会导致错误。
+                <strong>注意：</strong>不同版本的 OpenClaw 对这两种格式的支持不一致，混合使用会导致错误。官方推荐在 models 列表中只使用模型名称，不带 provider 前缀。
             </div>
 
             <div class="solution-box">
@@ -179,41 +209,83 @@
         </div>
 
         <div class="section">
-            <h2>常见问题 2：Session 缓存导致切换失败</h2>
+            <h2>常见问题 2："Model is not allowed" 错误</h2>
+            
+            <h3>错误现象</h3>
+            <div class="error-box">
+                ⚠️ Model "xxx" is not allowed
+            </div>
+            
+            <div class="official-box">
+                <h4>📖 官方解释</h4>
+                <p>根据 OpenClaw 官方 FAQ，这个错误表示配置的模型不在允许的模型列表中。可能的原因：</p>
+                <ul>
+                    <li>模型名称拼写错误</li>
+                    <li>模型未在 <code>agents.defaults.models</code> 中定义</li>
+                    <li>使用了 provider 前缀导致解析失败</li>
+                </ul>
+            </div>
+
+            <div class="solution-box">
+                <h4>✅ 解决方案</h4>
+                <ol style="color: #b0b0b0; padding-left: 20px;">
+                    <li style="padding-left: 10px;">检查模型名称拼写，确保与官方支持的模型名称一致</li>
+                    <li style="padding-left: 10px;">在 <code>models</code> 对象中添加该模型的定义</li>
+                    <li style="padding-left: 10px;">移除模型名称中的 provider 前缀（如 <code>zhipu/</code>）</li>
+                    <li style="padding-left: 10px;">重启网关使配置生效：<code>openclaw gateway restart</code></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>常见问题 3：Session 缓存导致切换失败</h2>
             
             <h3>错误现象</h3>
             <div class="error-box">
                 修改配置为 glm-4-flash 后，飞书对话仍然报错：Unknown model: zhipu/glm-4-flash
             </div>
             
-            <h3>问题原因</h3>
-            <p>OpenClaw 的 session 机制会缓存模型配置。当飞书 channel 已经建立了使用 Kimi 的 session 后，即使修改配置为 GLM，已存在的 session 仍会继续使用旧的 Kimi 模型。</p>
+            <div class="official-box">
+                <h4>📖 官方解释</h4>
+                <p>根据官方文档，OpenClaw 的 session 会缓存模型配置。当 channel（如飞书、Telegram）已经建立了使用特定模型的 session 后，即使修改配置，已存在的 session 仍会继续使用旧的模型配置。</p>
+            </div>
 
             <div class="solution-box">
                 <h4>✅ 解决方案</h4>
                 <p>需要彻底重启网关，断开所有连接：</p>
-                <ol style="color: #b0b0b0; padding-left: 20px;">
-                    <li style="padding-left: 10px;">停止网关：<code>openclaw gateway stop</code></li>
-                    <li style="padding-left: 10px;">等待几秒确保进程完全退出</li>
-                    <li style="padding-left: 10px;">启动网关：<code>openclaw gateway start</code></li>
-                </ol>
-                <p style="margin-top: 15px;">或者使用一键脚本：</p>
-                <pre><code>taskkill /F /IM "node.exe"
+                <pre><code># 停止网关
+openclaw gateway stop
+
+# 等待几秒确保进程完全退出
+
+# 启动网关
+openclaw gateway start
+
+# 或者使用一键重启
+openclaw gateway restart</code></pre>
+                
+                <p style="margin-top: 15px;">如果问题持续，强制杀掉 node 进程：</p>
+                <pre><code># Windows
+taskkill /F /IM "node.exe"
+openclaw gateway start
+
+# macOS/Linux
+killall node
 openclaw gateway start</code></pre>
             </div>
         </div>
 
         <div class="section">
-            <h2>常见问题 3：配置验证失败</h2>
+            <h2>常见问题 4：配置验证失败</h2>
             
             <h3>错误现象</h3>
             <div class="error-box">
-                Invalid config at openclaw.json:<br>
+                Invalid config at openclaw.json:
                 - agents.defaults.models.glm-4-flash: Unrecognized key: "provider"
             </div>
             
             <h3>问题原因</h3>
-            <p>在 models 配置中错误地添加了 <code>"provider": "zhipu"</code> 字段，这是不允许的。provider 应该在 auth.profiles 中声明。</p>
+            <p>在 models 配置中错误地添加了 <code>"provider": "zhipu"</code> 字段。provider 应该在 <code>auth.profiles</code> 中声明，而不是在 models 中。</p>
 
             <div class="solution-box">
                 <h4>✅ 正确配置</h4>
@@ -237,27 +309,55 @@ openclaw gateway start</code></pre>
     }
   }
 }</code></pre>
+                
+                <p style="margin-top: 15px;">修复后运行 doctor 清理配置：</p>
+                <pre><code>openclaw doctor --fix</code></pre>
             </div>
         </div>
 
         <div class="section">
-            <h2>常见问题 4：配置被自动重置</h2>
+            <h2>常见问题 5：配置被自动重置</h2>
             
             <h3>错误现象</h3>
             <div class="error-box">
                 运行 openclaw doctor --fix 后，配置被自动修改，primary 模型又变回 Kimi
             </div>
             
-            <h3>问题原因</h3>
-            <p>doctor 命令会尝试"修复"配置，有时会覆盖用户的手动修改。</p>
+            <div class="official-box">
+                <h4>📖 官方解释</h4>
+                <p>doctor 命令会尝试"修复"配置，有时会覆盖用户的手动修改。建议使用 <code>--repair</code> 参数时谨慎操作。</p>
+            </div>
 
             <div class="solution-box">
                 <h4>✅ 解决方案</h4>
                 <ul>
-                    <li>修改配置后，备份 openclaw.json</li>
+                    <li>修改配置前，先备份 openclaw.json：<code>cp openclaw.json openclaw.json.bak</code></li>
                     <li>避免频繁使用 <code>doctor --fix</code></li>
                     <li>手动编辑配置时，使用 <code>openclaw config patch</code> 而非直接修改文件</li>
+                    <li>如果配置被重置，从备份恢复：<code>cp openclaw.json.bak openclaw.json</code></li>
                 </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>官方推荐：如何切换模型（不丢失配置）</h2>
+            
+            <div class="official-box">
+                <h4>📖 官方 FAQ 摘录</h4>
+                <p>根据官方文档，切换模型的推荐方法：</p>
+                <pre><code># 查看当前模型
+openclaw config get agents.defaults.model
+
+# 设置新模型（不重启）
+openclaw config patch agents.defaults.model.primary="new-model-name"
+
+# 或者直接编辑配置文件后重启网关
+openclaw gateway restart</code></pre>
+            </div>
+            
+            <div class="tip">
+                <strong>💡 重要提示：</strong><br>
+                切换模型后，已存在的 session 不会自动切换到新模型。需要等待 session 超时（通常 30 分钟）或重启网关强制断开所有 session。
             </div>
         </div>
 
@@ -269,7 +369,14 @@ openclaw gateway start</code></pre>
 
             <h3>2. 配置验证</h3>
             <p>修改配置后，使用以下命令验证：</p>
-            <pre><code>openclaw config validate</code></pre>
+            <pre><code># 验证配置格式
+openclaw config validate
+
+# 查看模型状态
+openclaw models status
+
+# 运行诊断
+openclaw doctor</code></pre>
 
             <h3>3. 快速恢复脚本</h3>
             <p>在桌面创建重启脚本，出现问题时快速恢复：</p>
@@ -284,32 +391,66 @@ pause</code></pre>
             <pre><code># HEARTBEAT.md
 ## 每小时检查
 - [ ] 检查网关状态: openclaw gateway status
-- [ ] 检查模型配置
+- [ ] 检查模型配置: openclaw config get agents.defaults.model
 - [ ] 如有异常，发送提醒</code></pre>
         </div>
 
         <div class="section">
             <h2>替代方案</h2>
             <p>如果 GLM 配置问题持续无法解决，可以考虑：</p>
-            <ul>
-                <li><span class="highlight">使用 Kimi 替代</span> — 配置简单，稳定性好</li>
-                <li><span class="highlight">使用 OpenAI/Anthropic</span> — 国际大模型，生态成熟</li>
-                <li><span class="highlight">本地模型</span> — 如 Ollama + Llama，无需 API Key</li>
-            </ul>
+            
+            <div class="official-box">
+                <h4>📖 官方支持的替代方案</h4>
+                <ul>
+                    <li><span class="highlight">Kimi (Moonshot)</span> — 配置简单，稳定性好，官方推荐</li>
+                    <li><span class="highlight">Anthropic (Claude)</span> — 支持 setup-token 或 API key</li>
+                    <li><span class="highlight">OpenAI (Codex)</span> — 支持 OAuth 登录</li>
+                    <li><span class="highlight">OpenRouter</span> — 支持多种模型，包括 GLM、Kimi 等</li>
+                    <li><span class="highlight">本地模型</span> — Ollama、LM Studio 等，数据完全本地</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>快速诊断命令</h2>
+            
+            <div class="official-box">
+                <h4>📖 官方推荐的故障排查流程（First 60 seconds）</h4>
+                <pre><code># 1. 快速状态检查
+openclaw status
+
+# 2. 详细诊断报告
+openclaw status --all
+
+# 3. 网关状态
+openclaw gateway status
+
+# 4. 模型状态检查
+openclaw models status
+
+# 5. 实时日志
+tail -f $(ls -t /tmp/openclaw/openclaw-*.log | head -1)
+
+# 6. 运行修复
+dopenclaw doctor</code></pre>
+            </div>
         </div>
 
         <div class="section">
             <h2>参考资源</h2>
+            
             <ul>
                 <li>OpenClaw 官方文档: <a href="https://docs.openclaw.ai" target="_blank">docs.openclaw.ai</a></li>
-                <li>智谱 AI 开发者平台: <a href="https://open.bigmodel.cn/" target="_blank">open.bigmodel.cn</a></li>
+                <li>官方 FAQ（模型相关）: <a href="https://docs.openclaw.ai/help/faq#why-do-i-see-model-is-not-allowed-and-then-no-reply" target="_blank">docs.openclaw.ai/help/faq</a></li>
                 <li>GitHub Issues: <a href="https://github.com/openclaw/openclaw/issues" target="_blank">github.com/openclaw/openclaw</a></li>
+                <li>智谱 AI 开发者平台: <a href="https://open.bigmodel.cn/" target="_blank">open.bigmodel.cn</a></li>
+                <li>Kimi 开发者平台: <a href="https://platform.moonshot.cn/" target="_blank">platform.moonshot.cn</a></li>
             </ul>
         </div>
 
         <footer>
-            <p>🐾 由小爪整理生成 · 基于实际使用经验</p>
-            <p>生成时间：2026年2月11日</p>
+            <p>🐾 由小爪整理生成 · 基于 OpenClaw 官方文档与实际使用经验</p>
+            <p>生成时间：2026年2月11日 · 文档版本：OpenClaw 2026.2.9</p>
         </footer>
     </div>
 </body>
