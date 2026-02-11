@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw GLM 模型配置问题汇总</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+            line-height: 1.8;
+            padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle { color: #888; }
+        .section {
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid #e94560;
+        }
+        h2 {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2::before { content: "▸"; color: #e94560; }
+        h3 {
+            color: #ff6b6b;
+            font-size: 1.1rem;
+            margin: 20px 0 15px;
+        }
+        .error-box {
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #ff6b6b;
+        }
+        .solution-box {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .solution-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+        code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ffd700;
+        }
+        pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        ul { list-style: none; padding-left: 0; }
+        li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #b0b0b0;
+        }
+        li::before {
+            content: "•";
+            color: #e94560;
+            position: absolute;
+            left: 0;
+        }
+        .highlight { color: #ffd700; font-weight: 600; }
+        .warning {
+            background: rgba(255, 152, 0, 0.1);
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>OpenClaw GLM 模型配置问题汇总</h1>
+            <p class="subtitle">智谱 AI GLM 模型在 OpenClaw 中的常见问题与解决方案</p>
+        </header>
+
+        <div class="section">
+            <h2>问题背景</h2>
+            <p>在使用 OpenClaw 配置智谱 AI (Zhipu) 的 GLM 模型时，经常会遇到 <span class="highlight">"Unknown model"</span> 错误。这主要是由于模型名称格式不统一、配置缓存问题以及网关重启机制导致的。</p>
+        </div>
+
+        <div class="section">
+            <h2>常见问题 1：模型名称前缀混乱</h2>
+            
+            <h3>错误现象</h3>
+            <div class="error-box">
+                ⚠️ Agent failed before reply: Unknown model: zhipu/glm-4-flash
+            </div>
+            
+            <h3>问题原因</h3>
+            <p>OpenClaw 的模型配置存在两种写法，容易导致混淆：</p>
+            <ul>
+                <li><code>glm-4-flash</code> — 简洁格式（推荐）</li>
+                <li><code>zhipu/glm-4-flash</code> — 带 provider 前缀</li>
+            </ul>
+            
+            <div class="warning">
+                <strong>注意：</strong>不同版本的 OpenClaw 对这两种格式的支持不一致，混合使用会导致错误。
+            </div>
+
+            <div class="solution-box">
+                <h4>✅ 解决方案</h4>
+                <p>统一使用简洁格式，并在 models 中正确声明：</p>
+                <pre><code>{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "glm-4-flash"
+      },
+      "models": {
+        "glm-4-flash": {
+          "alias": "GLM-4-Flash"
+        },
+        "glm-4-plus": {
+          "alias": "GLM-4-Plus"
+        }
+      }
+    }
+  }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>常见问题 2：Session 缓存导致切换失败</h2>
+            
+            <h3>错误现象</h3>
+            <div class="error-box">
+                修改配置为 glm-4-flash 后，飞书对话仍然报错：Unknown model: zhipu/glm-4-flash
+            </div>
+            
+            <h3>问题原因</h3>
+            <p>OpenClaw 的 session 机制会缓存模型配置。当飞书 channel 已经建立了使用 Kimi 的 session 后，即使修改配置为 GLM，已存在的 session 仍会继续使用旧的 Kimi 模型。</p>
+
+            <div class="solution-box">
+                <h4>✅ 解决方案</h4>
+                <p>需要彻底重启网关，断开所有连接：</p>
+                <ol style="color: #b0b0b0; padding-left: 20px;">
+                    <li style="padding-left: 10px;">停止网关：<code>openclaw gateway stop</code></li>
+                    <li style="padding-left: 10px;">等待几秒确保进程完全退出</li>
+                    <li style="padding-left: 10px;">启动网关：<code>openclaw gateway start</code></li>
+                </ol>
+                <p style="margin-top: 15px;">或者使用一键脚本：</p>
+                <pre><code>taskkill /F /IM "node.exe"
+openclaw gateway start</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>常见问题 3：配置验证失败</h2>
+            
+            <h3>错误现象</h3>
+            <div class="error-box">
+                Invalid config at openclaw.json:<br>
+                - agents.defaults.models.glm-4-flash: Unrecognized key: "provider"
+            </div>
+            
+            <h3>问题原因</h3>
+            <p>在 models 配置中错误地添加了 <code>"provider": "zhipu"</code> 字段，这是不允许的。provider 应该在 auth.profiles 中声明。</p>
+
+            <div class="solution-box">
+                <h4>✅ 正确配置</h4>
+                <pre><code>{
+  "auth": {
+    "profiles": {
+      "glm:default": {
+        "provider": "zhipu",
+        "mode": "api_key"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "models": {
+        "glm-4-flash": {
+          "alias": "GLM-4-Flash"
+          // ❌ 不要在这里加 provider
+        }
+      }
+    }
+  }
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>常见问题 4：配置被自动重置</h2>
+            
+            <h3>错误现象</h3>
+            <div class="error-box">
+                运行 openclaw doctor --fix 后，配置被自动修改，primary 模型又变回 Kimi
+            </div>
+            
+            <h3>问题原因</h3>
+            <p>doctor 命令会尝试"修复"配置，有时会覆盖用户的手动修改。</p>
+
+            <div class="solution-box">
+                <h4>✅ 解决方案</h4>
+                <ul>
+                    <li>修改配置后，备份 openclaw.json</li>
+                    <li>避免频繁使用 <code>doctor --fix</code></li>
+                    <li>手动编辑配置时，使用 <code>openclaw config patch</code> 而非直接修改文件</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>最佳实践建议</h2>
+            
+            <h3>1. 单一模型策略</h3>
+            <p>如果频繁遇到模型切换问题，建议只配置一个主力模型（如 Kimi），彻底删除其他模型配置，避免冲突。</p>
+
+            <h3>2. 配置验证</h3>
+            <p>修改配置后，使用以下命令验证：</p>
+            <pre><code>openclaw config validate</code></pre>
+
+            <h3>3. 快速恢复脚本</h3>
+            <p>在桌面创建重启脚本，出现问题时快速恢复：</p>
+            <pre><code>@echo off
+echo 重启 OpenClaw 网关...
+openclaw gateway restart
+echo 完成！
+pause</code></pre>
+
+            <h3>4. 监控告警</h3>
+            <p>设置 HEARTBEAT.md 定期检查：</p>
+            <pre><code># HEARTBEAT.md
+## 每小时检查
+- [ ] 检查网关状态: openclaw gateway status
+- [ ] 检查模型配置
+- [ ] 如有异常，发送提醒</code></pre>
+        </div>
+
+        <div class="section">
+            <h2>替代方案</h2>
+            <p>如果 GLM 配置问题持续无法解决，可以考虑：</p>
+            <ul>
+                <li><span class="highlight">使用 Kimi 替代</span> — 配置简单，稳定性好</li>
+                <li><span class="highlight">使用 OpenAI/Anthropic</span> — 国际大模型，生态成熟</li>
+                <li><span class="highlight">本地模型</span> — 如 Ollama + Llama，无需 API Key</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>参考资源</h2>
+            <ul>
+                <li>OpenClaw 官方文档: <a href="https://docs.openclaw.ai" target="_blank">docs.openclaw.ai</a></li>
+                <li>智谱 AI 开发者平台: <a href="https://open.bigmodel.cn/" target="_blank">open.bigmodel.cn</a></li>
+                <li>GitHub Issues: <a href="https://github.com/openclaw/openclaw/issues" target="_blank">github.com/openclaw/openclaw</a></li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>🐾 由小爪整理生成 · 基于实际使用经验</p>
+            <p>生成时间：2026年2月11日</p>
+        </footer>
+    </div>
+</body>
+</html>
